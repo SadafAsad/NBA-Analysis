@@ -30,7 +30,8 @@ def to_dict(list_dict):
 nba_teams = teams.get_teams()
 # print(nba_teams[0:3])
 
+# nba api result to dataframe
 dict_nba_teams=to_dict(nba_teams)
 df_teams=pd.DataFrame(dict_nba_teams)
-print(df_teams.head())
+# print(df_teams.head())
 
