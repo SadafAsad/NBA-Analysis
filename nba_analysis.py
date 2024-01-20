@@ -41,5 +41,5 @@ sql_connection = sqlite3.connect('nba.db')
 # to convert pandas dataframe to a table in a sqlite db
 df_teams.to_sql("NBATeams", sql_connection, if_exists='replace', index=False)
 
-query_stmt = "SELECT * FROM NBATeams"
-print(pd.read_sql(query_stmt, sql_connection))
+# query_stmt = "SELECT * FROM NBATeams"
+# print(pd.read_sql(query_stmt, sql_connection))
