@@ -1,6 +1,7 @@
 # import section
 import pandas as pd
 from nba_api.stats.static import teams
+import sqlite3
 
 # # ---------------------------------------------
 # # How to create a dataframe from a dictionary
@@ -35,3 +36,10 @@ dict_nba_teams=to_dict(nba_teams)
 df_teams=pd.DataFrame(dict_nba_teams)
 # print(df_teams.head())
 
+# connecting to sqlite db
+sql_connection = sqlite3.connect('nba.db')
+# to convert pandas dataframe to a table in a sqlite db
+df_teams.to_sql("NBATeams", sql_connection, if_exists='replace', index=False)
+
+query_stmt = "SELECT * FROM NBATeams"
+print(pd.read_sql(query_stmt, sql_connection))
