@@ -55,16 +55,14 @@ df_teams.to_sql(TABLE_NAME, sql_connection, if_exists='replace', index=False)
 # ----------------
 # Analyzing Data
 # ----------------
-query_stmt_1 = f"SELECT *, COUNT(*) AS TeamCounts \
-                FROM ( \
-                    SELECT state, \
-                        CASE \
-                            WHEN year_founded<1946 THEN 'BEFORE-1945' \
-                            WHEN year_founded between 1946 and 1964 THEN '1946-1964' \
-                            WHEN year_founded between 1965 and 1980 THEN '1965-1980' \
-                            WHEN year_founded between 1981 and 1996 THEN '1981-1996' \
-                            ELSE '1997-NOW' \
-                        END AS year_founded \
-                    FROM {TABLE_NAME}) grouped_teams \
-                GROUP BY grouped_teams.year_founded"
+query_stmt_1 = f"SELECT COUNT(*) AS teams_count, \
+                    CASE \
+                        WHEN year_founded<1946 THEN 'BEFORE-1945' \
+                        WHEN year_founded between 1946 and 1964 THEN '1946-1964' \
+                        WHEN year_founded between 1965 and 1980 THEN '1965-1980' \
+                        WHEN year_founded between 1981 and 1996 THEN '1981-1996' \
+                        ELSE '1997-NOW' \
+                    END AS year_range \
+                FROM {TABLE_NAME} year_grouped \
+                GROUP BY year_range"
 print(pd.read_sql(query_stmt_1, sql_connection))
