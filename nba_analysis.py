@@ -3,6 +3,7 @@ import pandas as pd
 from nba_api.stats.static import teams
 import sqlite3
 import matplotlib.pyplot as plt
+from nba_api.stats.endpoints import leaguegamefinder
 
 # # ---------------------------------------------
 # # How to create a dataframe from a dictionary
@@ -71,16 +72,39 @@ query_stmt_1 = f"SELECT COUNT(*) AS teams_count, \
 # ----------------
 # Visualizing Analysis
 # ----------------
-res_df = pd.read_sql_query(query_stmt_1, sql_connection)
+# res_df = pd.read_sql_query(query_stmt_1, sql_connection)
+
+# fig, ax = plt.subplots()
+
+# year_ranges = res_df['year_range'].array
+# teams_count = res_df['teams_count'].array
+
+# ax.bar(year_ranges, teams_count)
+# ax.set_ylabel('Teams Count')
+# ax.set_title('Number of NBA teams founded within year range')
+
+# plt.show()
+
+# TO BE CONTINUED
+# ANOTHER SET OF DATA TO WORK WITH
+# The parameter team_id_nullable is the unique ID for a team. 
+# Under the hood, the NBA API is making a HTTP request.
+# The information requested is provided and is transmitted via an HTTP response.
+gamefinder = leaguegamefinder.LeagueGameFinder(team_id_nullable=1610612761)
+gamefinder.get_json()
+games = gamefinder.get_data_frames()[0]
+print(games)
+games.head()
+
+games_home=games[games['MATCHUP']=='TOR vs. GSW']
+games_home['PLUS_MINUS'].mean()
+
+games_away=games[games['MATCHUP']=='TOR @ GSW']
+games_away['PLUS_MINUS'].mean()
 
 fig, ax = plt.subplots()
 
-year_ranges = res_df['year_range'].array
-teams_count = res_df['teams_count'].array
-
-ax.bar(year_ranges, teams_count)
-ax.set_ylabel('Teams Count')
-ax.set_title('Number of NBA teams founded within year range')
-
+games_away.plot(x='GAME_DATE',y='PLUS_MINUS', ax=ax)
+games_home.plot(x='GAME_DATE',y='PLUS_MINUS', ax=ax)
+ax.legend(["away", "home"])
 plt.show()
-
