@@ -28,5 +28,9 @@ def to_dict(list_dict):
 
 # check what the returned data look like
 nba_teams = teams.get_teams()
-print(nba_teams[0:3])
+# print(nba_teams[0:3])
+
+dict_nba_teams=to_dict(nba_teams)
+df_teams=pd.DataFrame(dict_nba_teams)
+print(df_teams.head())
 
