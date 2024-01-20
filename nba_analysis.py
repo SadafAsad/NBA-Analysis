@@ -27,6 +27,9 @@ def to_dict(list_dict):
             out_dict[key].append(value)
     return out_dict
 
+# ------------------
+# Collecting Data
+# ------------------
 # check what the returned data look like
 nba_teams = teams.get_teams()
 # print(nba_teams[0:3])
@@ -36,6 +39,9 @@ dict_nba_teams=to_dict(nba_teams)
 df_teams=pd.DataFrame(dict_nba_teams)
 # print(df_teams.head())
 
+# --------------
+# Storing Data
+# --------------
 # connecting to sqlite db
 sql_connection = sqlite3.connect('nba.db')
 # to convert pandas dataframe to a table in a sqlite db
@@ -43,3 +49,8 @@ df_teams.to_sql("NBATeams", sql_connection, if_exists='replace', index=False)
 
 # query_stmt = "SELECT * FROM NBATeams"
 # print(pd.read_sql(query_stmt, sql_connection))
+
+# ----------------
+# Analyzing Data
+# ----------------
+
