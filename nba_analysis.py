@@ -42,10 +42,12 @@ df_teams=pd.DataFrame(dict_nba_teams)
 # --------------
 # Storing Data
 # --------------
+DB_NAME = 'nba.db'
+TABLE_NAME = "NBATeams"
 # connecting to sqlite db
-sql_connection = sqlite3.connect('nba.db')
+sql_connection = sqlite3.connect(DB_NAME)
 # to convert pandas dataframe to a table in a sqlite db
-df_teams.to_sql("NBATeams", sql_connection, if_exists='replace', index=False)
+df_teams.to_sql(TABLE_NAME, sql_connection, if_exists='replace', index=False)
 
 # query_stmt = "SELECT * FROM NBATeams"
 # print(pd.read_sql(query_stmt, sql_connection))
@@ -53,4 +55,16 @@ df_teams.to_sql("NBATeams", sql_connection, if_exists='replace', index=False)
 # ----------------
 # Analyzing Data
 # ----------------
-
+query_stmt_1 = f"SELECT *, COUNT(*) AS TeamCounts \
+                FROM ( \
+                    SELECT state, \
+                        CASE \
+                            WHEN year_founded<1946 THEN 'BEFORE-1945' \
+                            WHEN year_founded between 1946 and 1964 THEN '1946-1964' \
+                            WHEN year_founded between 1965 and 1980 THEN '1965-1980' \
+                            WHEN year_founded between 1981 and 1996 THEN '1981-1996' \
+                            ELSE '1997-NOW' \
+                        END AS year_founded \
+                    FROM {TABLE_NAME}) grouped_teams \
+                GROUP BY grouped_teams.year_founded"
+print(pd.read_sql(query_stmt_1, sql_connection))
