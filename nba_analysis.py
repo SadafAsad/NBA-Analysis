@@ -2,6 +2,7 @@
 import pandas as pd
 from nba_api.stats.static import teams
 import sqlite3
+import matplotlib.pyplot as plt
 
 # # ---------------------------------------------
 # # How to create a dataframe from a dictionary
@@ -64,5 +65,22 @@ query_stmt_1 = f"SELECT COUNT(*) AS teams_count, \
                         ELSE '1997-NOW' \
                     END AS year_range \
                 FROM {TABLE_NAME} year_grouped \
-                GROUP BY year_range"
-print(pd.read_sql(query_stmt_1, sql_connection))
+                GROUP BY year_range;"
+# print(pd.read_sql(query_stmt_1, sql_connection))
+
+# ----------------
+# Visualizing Analysis
+# ----------------
+res_df = pd.read_sql_query(query_stmt_1, sql_connection)
+
+fig, ax = plt.subplots()
+
+year_ranges = res_df['year_range'].array
+teams_count = res_df['teams_count'].array
+
+ax.bar(year_ranges, teams_count)
+ax.set_ylabel('Teams Count')
+ax.set_title('Number of NBA teams founded within year range')
+
+plt.show()
+
