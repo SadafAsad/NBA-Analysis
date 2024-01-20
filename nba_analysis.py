@@ -10,4 +10,16 @@ print(f"type(df): \n{type(df)}\n")
 print(f"df.head(): \n{df.head()}\n")
 print(f"df.mean(): \n{df.mean()}\n")
 
+# ----------------------------------------------------------------------------------
+# Constructing a dictionary from an array of dictionaries
+# with each key, value pair in the required format to later convert into dataframe
+# key being a simple string and value an array
+# ----------------------------------------------------------------------------------
+def to_dict(list_dict):
+    keys=list_dict[0].keys()
+    out_dict={key:[] for key in keys}
+    for dict_ in list_dict:
+        for key, value in dict_.items():
+            out_dict[key].append(value)
+    return out_dict
 
